@@ -11,7 +11,7 @@ class Node {
 
 function addRight(root, rootLayer, leng) {
 	var tmpRoot = root;
-	for(i = 1; i < leng; i++) {
+	for(var i = 1; i < leng; i++) {
 		var item = document.createElement('div');
 		rootLayer.appendChild(item);
 		item.classList.add('box');
@@ -35,13 +35,25 @@ function addLayer() {
 	return newRoot;
 }
 
-let container = document.getElementById('container');
-// let rootBox = document.createElement('div');
-// let rootLayer = document.createElement('div');
-// container.appendChild(rootLayer);
-// rootLayer.appendChild(rootBox);
+function linkUpDown(x, y) {
+	var tmpx = x, tmpy = y;
+	while(tmpx != null && tmpy != null) {
+		tmpx.down = tmpy;
+		tmpy.up = tmpx;
+		tmpx = tmpx.right;
+		tmpy = tmpy.right;
+	}
+}
 
-// rootBox.classList.add('box');
-// let root = new Node(rootBox);
-// addRight(root, rootLayer, 8);
-let layers = [addLayer(), addLayer(), addLayer()];
+function link(layers) {
+	for(var i = 0; i < layers.length - 1; i++) {
+		linkUpDown(layers[i], layers[i + 1]);
+	}
+}
+
+let container = document.getElementById('container');
+let layers = [];
+for(var i = 1; i <= 8; i++) {
+	layers.push(addLayer());
+}
+link(layers);
