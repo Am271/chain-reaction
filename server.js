@@ -12,6 +12,13 @@ app.get('/', (req, res) => {
   res.sendFile('index.html');
 });
 
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('move', (move)=>{
+  	console.log(move);
+  });
+});
+
 server.listen(8080, () => {
   console.log('listening on *:8080');
 });

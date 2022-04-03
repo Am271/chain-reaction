@@ -10,7 +10,8 @@ class Node {
 			for(var i of layers) {
 				while(i != null) {
 					if(i.box == this) {
-						console.log(getCoord(i));
+						var a = getCoord(i)
+						socket.emit('move', {'right' : a[0], 'down' : a[1]});
 						break;
 					}
 					i = i.right;
@@ -67,18 +68,17 @@ function getCoord(x) {
 
 	while(x_ != null) {
 		right++;
-		console.log('going left');
 		x_ = x_.left;
 	}
 
 	while(x != null) {
 		down++;
-		console.log('going up');
 		x = x.up;
 	}
 	return [right, down];
 }
 
+const socket = io();
 let container = document.getElementById('container');
 let layers = [];
 for(var i = 1; i <= 8; i++) {
@@ -86,4 +86,3 @@ for(var i = 1; i <= 8; i++) {
 }
 
 link(layers);
-// events(layers);
