@@ -13,10 +13,11 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('move', (move)=>{
-  	console.log(move);
-  });
+  	console.log('a user connected');
+  	socket.on('move', (move)=>{
+  		console.log(move);
+  		io.emit('move', move);
+  	});
 });
 
 server.listen(8080, () => {

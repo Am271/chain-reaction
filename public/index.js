@@ -86,3 +86,12 @@ for(var i = 1; i <= 8; i++) {
 }
 
 link(layers);
+
+socket.on('move', function(move){
+	var i = 2, tmp = layers[move.down - 1];
+	while(i <= move.right) {
+		i++;
+		tmp = tmp.right;
+	}
+	tmp.box.style.backgroundColor = 'green';
+});
