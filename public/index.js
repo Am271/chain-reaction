@@ -7,15 +7,18 @@ class Node {
 		this.count = 0;
 		this.box = box;
 		this.box.addEventListener('click', function() {
-			for(var i of layers) {
-				while(i != null) {
-					if(i.box == this) {
-						var a = getCoord(i)
-						socket.emit('move', {'right' : a[0], 'down' : a[1], 'colour' : colour_});
-						break;
+			if(turn) {
+				for(var i of layers) {
+					while(i != null) {
+						if(i.box == this) {
+							var a = getCoord(i)
+							socket.emit('move', {'right' : a[0], 'down' : a[1], 'colour' : colour_});
+							break;
+						}
+						i = i.right;
 					}
-					i = i.right;
 				}
+				turn = false;
 			}
 		});
 	}
@@ -107,6 +110,7 @@ function getCoord(x) {
 const socket = io();
 let layers = [];
 let colour_ = '';
+let turn = true;
 let container = document.getElementById('container');
 for(var i = 1; i <= 8; i++) {
 	layers.push(addLayer());
@@ -124,6 +128,6 @@ socket.on('move', function(move){
 		i++;
 		tmp = tmp.right;
 	}
-	console.log(move);
+	if(move.colour != colour_) turn = true;
 	tmp.count_(tmp, move.colour);
 });
