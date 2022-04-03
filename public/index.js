@@ -5,6 +5,7 @@ class Node {
 		this.down = null;
 		this.left = null;
 		this.right = null;
+		this.count = 0;
 		this.box = box;
 		this.box.addEventListener('click', function() {
 			for(var i of layers) {
@@ -12,12 +13,39 @@ class Node {
 					if(i.box == this) {
 						var a = getCoord(i)
 						socket.emit('move', {'right' : a[0], 'down' : a[1]});
+						// i.count_(i);
 						break;
 					}
 					i = i.right;
 				}
 			}
 		});
+	}
+
+	count_(node) {
+		node.count++;
+		var tmp = 0;
+		if(node.up)
+			tmp++;
+		if(node.down)
+			tmp++;
+		if(node.left)
+			tmp++;
+		if(node.right)
+			tmp++;
+		if(tmp == node.count) {
+			if(node.up)
+				this.count_(node.up);
+			if(node.down)
+				this.count_(node.down);
+			if(node.left)
+				this.count_(node.left);
+			if(node.right)
+				this.count_(node.right);
+			node.count = 0;
+		}
+		node.box.innerText = node.count;
+		node.box.style.backgroundColor = 'green';
 	}
 }
 
@@ -93,5 +121,5 @@ socket.on('move', function(move){
 		i++;
 		tmp = tmp.right;
 	}
-	tmp.box.style.backgroundColor = 'green';
+	tmp.count_(tmp);
 });
