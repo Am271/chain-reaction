@@ -12,13 +12,15 @@ class Node {
 					while(i != null) {
 						if(i.box == this) {
 							var a = getCoord(i)
-							socket.emit('move', {'right' : a[0], 'down' : a[1], 'colour' : colour_});
+							if(i.box.style.backgroundColor == colour_ || !i.box.style.backgroundColor) {
+								turn = false;
+								socket.emit('move', {'right' : a[0], 'down' : a[1], 'colour' : colour_});
+							}
 							break;
 						}
 						i = i.right;
 					}
 				}
-				turn = false;
 			}
 		});
 	}
@@ -36,17 +38,19 @@ class Node {
 			tmp++;
 		if(tmp == node.count) {
 			if(node.up)
-				this.count_(node.up);
+				this.count_(node.up, colour);
 			if(node.down)
-				this.count_(node.down);
+				this.count_(node.down, colour);
 			if(node.left)
-				this.count_(node.left);
+				this.count_(node.left, colour);
 			if(node.right)
-				this.count_(node.right);
+				this.count_(node.right, colour);
 			node.count = 0;
+			node.box.style.backgroundColor = '';
 		}
+		else
+			node.box.style.backgroundColor = colour;
 		node.box.innerText = node.count;
-		node.box.style.backgroundColor = colour;
 	}
 }
 
