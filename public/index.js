@@ -6,6 +6,17 @@ class Node {
 		this.left = null;
 		this.right = null;
 		this.box = box;
+		this.box.addEventListener('click', function() {
+			for(var i of layers) {
+				while(i != null) {
+					if(i.box == this) {
+						console.log(getCoord(i));
+						break;
+					}
+					i = i.right;
+				}
+			}
+		});
 	}
 }
 
@@ -51,9 +62,28 @@ function link(layers) {
 	}
 }
 
+function getCoord(x) {
+	var down = 0, right = 0, x_ = x;
+
+	while(x_ != null) {
+		right++;
+		console.log('going left');
+		x_ = x_.left;
+	}
+
+	while(x != null) {
+		down++;
+		console.log('going up');
+		x = x.up;
+	}
+	return [right, down];
+}
+
 let container = document.getElementById('container');
 let layers = [];
 for(var i = 1; i <= 8; i++) {
 	layers.push(addLayer());
 }
+
 link(layers);
+// events(layers);
