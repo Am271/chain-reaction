@@ -121,6 +121,9 @@ for(var i = 1; i <= 8; i++) {
 }
 
 link(layers);
+let msg = document.createElement('div');
+container.appendChild(msg);
+msg.innerText = 'Your Turn;'
 
 socket.on('colour', function(colour) {
 	colour_ = colour.colour;
@@ -132,6 +135,10 @@ socket.on('move', function(move){
 		i++;
 		tmp = tmp.right;
 	}
-	if(move.colour != colour_) turn = true;
+	if(move.colour != colour_) {
+		turn = true;
+		msg.innerText = 'Your Turn!'
+	}
+	else msg.innerText = 'Not your Turn!'
 	tmp.count_(tmp, move.colour);
 });
