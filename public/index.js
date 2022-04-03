@@ -123,7 +123,7 @@ for(var i = 1; i <= 8; i++) {
 link(layers);
 let msg = document.createElement('div');
 container.appendChild(msg);
-msg.innerText = 'Your Turn;'
+msg.innerText = 'Your Turn!';
 
 socket.on('colour', function(colour) {
 	colour_ = colour.colour;
