@@ -1,6 +1,5 @@
 class Node {
 	constructor(box) {
-		this.colour = '';
 		this.up = null;
 		this.down = null;
 		this.left = null;
@@ -12,8 +11,7 @@ class Node {
 				while(i != null) {
 					if(i.box == this) {
 						var a = getCoord(i)
-						socket.emit('move', {'right' : a[0], 'down' : a[1]});
-						// i.count_(i);
+						socket.emit('move', {'right' : a[0], 'down' : a[1], 'colour' : colour_});
 						break;
 					}
 					i = i.right;
@@ -22,7 +20,7 @@ class Node {
 		});
 	}
 
-	count_(node) {
+	count_(node, colour) {
 		node.count++;
 		var tmp = 0;
 		if(node.up)
@@ -45,7 +43,7 @@ class Node {
 			node.count = 0;
 		}
 		node.box.innerText = node.count;
-		node.box.style.backgroundColor = 'green';
+		node.box.style.backgroundColor = colour;
 	}
 }
 
@@ -107,13 +105,18 @@ function getCoord(x) {
 }
 
 const socket = io();
-let container = document.getElementById('container');
 let layers = [];
+let colour_ = '';
+let container = document.getElementById('container');
 for(var i = 1; i <= 8; i++) {
 	layers.push(addLayer());
 }
 
 link(layers);
+
+socket.on('colour', function(colour) {
+	colour_ = colour.colour;
+});
 
 socket.on('move', function(move){
 	var i = 2, tmp = layers[move.down - 1];
@@ -121,5 +124,6 @@ socket.on('move', function(move){
 		i++;
 		tmp = tmp.right;
 	}
-	tmp.count_(tmp);
+	console.log(move);
+	tmp.count_(tmp, move.colour);
 });
